@@ -1,0 +1,21 @@
+{
+  "images": ["ground", "island", "star"],
+  "ground": { "x": 400, "y": 588 },
+  "platforms": [
+    { "x": 600, "y": 450, "img": "island" },
+    { "x": 50, "y": 250, "img": "island" },
+    { "x": 650, "y": 220, "img": "island" },
+    { "x": 250, "y": 520, "img": "island" },
+    { "x": 250, "y": 320, "img": "island" }
+  ],
+  "stars": [
+    { "x": 22, "y": 0, "img": "star" },
+    { "x": 122, "y": 0, "img": "star" },
+    { "x": 222, "y": 0, "img": "star" },
+    { "x": 322, "y": 0, "img": "star" },
+    { "x": 422, "y": 0, "img": "star" },
+    { "x": 522, "y": 0, "img": "star" },
+    { "x": 622, "y": 0, "img": "star" },
+    { "x": 722, "y": 0, "img": "star" }
+  ]
+}
