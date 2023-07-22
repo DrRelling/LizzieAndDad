@@ -1,10 +1,17 @@
 import { CatsScene } from './scenes/cats';
+import { MenuScene } from './scenes/menu';
+import { SplashScene } from './scenes/splash';
 
-export const config = {
-  width: 800,
-  height: 600,
+export const config: Phaser.Types.Core.GameConfig = {
+  width: 1280,
+  height: 900,
   backgroundColor: 0xffffff,
-  scene: CatsScene,
+  parent: 'game',
+  scene: [
+    SplashScene,
+    MenuScene,
+    CatsScene,
+  ],
   input: {
     gamepad: true,
   },

@@ -1,6 +1,10 @@
 {
   "images": ["ground", "island", "star"],
   "ground": { "x": 400, "y": 588 },
+  "playerStart": [
+    { "x": 380, "y": 500 },
+    { "x": 500, "y": 500 }
+  ],
   "platforms": [
     { "x": 600, "y": 450, "img": "island" },
     { "x": 50, "y": 250, "img": "island" },
