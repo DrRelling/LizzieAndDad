@@ -1,6 +1,7 @@
 export enum InputSource {
     NONE,
-    KEYBOARD,
+    KEYBOARD1,
+    KEYBOARD2,
     CONTROLLER1,
     CONTROLLER2
 }

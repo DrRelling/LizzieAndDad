@@ -12,6 +12,9 @@ export const config: Phaser.Types.Core.GameConfig = {
     MenuScene,
     CatsScene,
   ],
+  audio: {
+    disableWebAudio: true,
+  },  
   input: {
     gamepad: true,
   },

@@ -1,4 +1,5 @@
-import assets from '../assets/game/*.png';
+import images from '../assets/images/game/*.png';
+import sounds from '../assets/sounds/game/*.mp3';
 import level from '../levels/level1.json';
 import { GameConfig } from '../interfaces/game-config.interface';
 import { Player } from '../classes/player.class';
@@ -9,7 +10,9 @@ export class CatsScene extends BaseScene {
   private _score = 0;
   private _player1: Player;
   private _player2: Player = null;
+
   private _cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  private _wasd: any;
 
   private _platforms: Phaser.Physics.Arcade.StaticGroup;
   private _collectibles: Phaser.Physics.Arcade.Group;
@@ -24,6 +27,10 @@ export class CatsScene extends BaseScene {
 
   public init(data: GameConfig): void {
     console.log(data);
+    if (data.player1Input == null) {
+      data = { player1Input: 1, player2Input: 0 };
+    }
+
     this._player1 = new Player(1, data.player1Input);
 
     if (data.player2Input !== 0) {
@@ -32,12 +39,20 @@ export class CatsScene extends BaseScene {
   }
 
   public preload(): void {
-    this.load.image('cat1', assets.cat1);
-    this.load.image('cat2', assets.cat2);
-    level.images.forEach((img) => this.load.image(img, assets[img]));
+    this.load.audio('collect', sounds.meow, { instances: 2 });
+    this.load.audio('jump', sounds.boing, { instances: 2 });
+    this.load.image('cat1', images.cat1);
+    this.load.image('cat2', images.cat2);
+
+    this.load.audio('music', sounds.house);
+    level.images.forEach((img) => this.load.image(img, images[img]));
   }
 
   public create(): void {
+    this.sound.add('collect');
+    this.sound.add('jump');
+    this.sound.add('music').play({ loop: true });
+
     this._createPlatforms();
     this._createCollectibles();
 
@@ -47,6 +62,7 @@ export class CatsScene extends BaseScene {
     }
 
     this._cursors = this.input.keyboard.createCursorKeys();
+    this._wasd = this.input.keyboard.addKeys('W,A,S,D');
 
     this._scoreText = this.add.text(16, 16, 'Stars: 0', {
       fontSize: '32px',
@@ -69,13 +85,22 @@ export class CatsScene extends BaseScene {
     let xVelocity = 0;
     let yVelocity = 0;
 
-    if (player.inputSource === InputSource.KEYBOARD) {
+    if (player.inputSource === InputSource.KEYBOARD1) {
       if (this._cursors.left.isDown) {
         xVelocity = -this._playerVelocityX;
       } else if (this._cursors.right.isDown) {
         xVelocity = this._playerVelocityX;
       }
       if (this._cursors.up.isDown) {
+        yVelocity = this._playerVelocityY;
+      }
+    } else if (player.inputSource === InputSource.KEYBOARD2) {
+      if (this._wasd.A.isDown) {
+        xVelocity = -this._playerVelocityX;
+      } else if (this._wasd.D.isDown) {
+        xVelocity = this._playerVelocityX;
+      }
+      if (this._wasd.W.isDown) {
         yVelocity = this._playerVelocityY;
       }
     } else if (
@@ -103,6 +128,7 @@ export class CatsScene extends BaseScene {
     player.sprite.setVelocityX(xVelocity);
 
     if (yVelocity < 0 && player.canJump) {
+      this.sound.play('jump', { seek: 0.35 });
       player.canJump = false;
       player.sprite.setVelocityY(yVelocity);
     }
@@ -121,9 +147,7 @@ export class CatsScene extends BaseScene {
     this.physics.add.collider(this._collectibles, this._platforms);
   }
 
-  private _createPlayer(
-    player: Player,
-  ) {
+  private _createPlayer(player: Player) {
     const startPos = level.playerStart[player.playerNumber - 1];
     player.sprite = this.physics.add.sprite(
       startPos.x,
@@ -142,6 +166,7 @@ export class CatsScene extends BaseScene {
       player.sprite,
       this._collectibles,
       (_, star) => {
+        this.sound.play('collect', { seek: 0.35 });
         star.destroy();
         this._score += 1;
         this._scoreText.setText('Stars: ' + this._score);

@@ -1,5 +1,5 @@
-import splashAssets from '../assets/splash/*.png';
-import sharedAssets from '../assets/shared/*.png';
+import splashAssets from '../assets/images/splash/*.png';
+import sharedAssets from '../assets/images/shared/*.png';
 import { BaseScene } from './baseScene';
 
 export class SplashScene extends BaseScene {
